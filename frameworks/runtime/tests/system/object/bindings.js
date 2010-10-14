@@ -164,6 +164,34 @@ test("fooBinding: .bar should bind to relative path", function() {
   equals("changedValue", testObject.get("foo"), "testObject.foo");
 });
 
+test("foo: SC.binding('TestNamespace.fromObject.bar') should follow absolute path", function() {
+  // create binding
+  testObject = TestObject.create({
+    foo: SC.binding("TestNamespace.fromObject.bar")
+  }) ;
+  SC.Binding.flushPendingChanges() ; // actually sets up up the binding
+  
+  // now make a change to see if the binding triggers.
+  fromObject.set("bar", "changedValue") ;
+  
+  SC.Binding.flushPendingChanges();
+  equals("changedValue", testObject.get("foo"), "testObject.foo");
+});
+
+test("foo: SC.binding('.bar') should bind to relative path", function() {
+  
+  testObject = TestObject.create({
+    foo: SC.binding(".bar")
+  }) ;
+  SC.Binding.flushPendingChanges() ; // actually sets up up the binding
+  
+  // now make a change to see if the binding triggers.
+  testObject.set("bar", "changedValue") ;
+  
+  SC.Binding.flushPendingChanges();
+  equals("changedValue", testObject.get("foo"), "testObject.foo");
+});
+
 test("fooBinding: SC.Binding.bool(TestNamespace.fromObject.bar should create binding with bool transform", function() {
   
   testObject = TestObject.create({

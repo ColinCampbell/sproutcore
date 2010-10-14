@@ -99,6 +99,19 @@ SC._object_extend = function _object_extend(base, ext) {
       if (bindings === null) bindings = (base._bindings || SC.EMPTY_ARRAY).slice();
       bindings[bindings.length] = key ;
 
+    } else if (value && value.parentBinding !== undefined && (key.length < 14 || key.slice(-14) !== "BindingDefault")) {
+      if (!clonedBindings) {
+        bindings = (bindings || SC.EMPTY_ARRAY).slice() ;
+        clonedBindings = YES ;
+      }
+
+      if (bindings === null) bindings = (base._bindings || SC.EMPTY_ARRAY).slice();
+      
+      // nullify the base for this key, but add binding to [key]Binding property
+      base[key] = null;
+      
+      key += "Binding"; // the value of this key gets set at the bottom of this function
+      bindings[bindings.length] = key;
     // Also add observers, outlets, and properties for functions...
     } else if (value && (value instanceof Function)) {
 
